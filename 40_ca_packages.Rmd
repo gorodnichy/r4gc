@@ -1,0 +1,184 @@
+
+# Canada-related Open source R codes and packages
+
+
+
+## Packages
+
+### Packages on CRAN
+
+
+One can go to https://packagemanager.rstudio.com/ to search and explore packages.
+
+Install them from Tools-> Install Packages in RStudio, or directly using the line below:
+
+``` 
+install.packages('cansim') `
+```
+
+#### rgovcan  - Easy Access to the Canadian Open Government Portal
+
+https://github.com/open-canada/rgovcan
+
+A R package to interact with the Open Canada API (see https://open.canada.ca/en/access-our-application-programming-interface-api), to search and download datasets (see Licence at https://open.canada.ca/en/open-government-licence-canada). It is our hope that we will be able to bring this package up to the standard of a ropensci packages (see this issue on ropensci/wishlist https://github.com/ropensci/wishlist/issues/27).
+
+This package makes extensive use of ckanr to access the Canadian government’s CKAN REST API.
+
+
+
+```
+library("rgovcan")
+dfo_search <- govcan_search(keywords = c("dfo"), records = 10)
+dfo_search
+
+# Another possibility is to start with a package id corresponding to an actual record 
+id <- "7ac5fe02-308d-4fff-b805-80194f8ddeb4" # Package ID
+id_search <- govcan_get_record(record_id = id)
+id_search
+id_resources <- govcan_get_resources(id_search)
+id_resources
+dfo_resources <- govcan_get_resources(dfo_search)
+
+path <- "tmp/data/"
+dir.create(path, recursive = TRUE)
+govcan_dl_resources(id_resources, path = path)
+```
+
+#### CANSIM2R - Directly Extracts Complete CANSIM Data Tables
+
+Extract CANSIM (Statistics Canada) tables and transform them into readily usable data in panel (wide) format. It can also extract more than one table at a time and produce the resulting merge by time period and geographical region.
+
+
+
+#### cansim - Accessing Statistics Canada Data Table and Vectors 
+
+https://github.com/mountainMath/cansim
+
+Searches for, accesses, and retrieves new-format and old-format Statistics Canada data tables, as well as individual vectors, as tidy data frames. This package deals with encoding issues, allows for bilingual English or French language data retrieval, and bundles convenience functions to make it easier to work with retrieved table data. Optional caching features are provided.
+
+
+
+#### cancensus 
+
+https://github.com/mountainMath/cancensus
+
+See also censusmapper
+
+
+#### https://github.com/mountainMath/tongfen
+
+
+#### https://github.com/mountainMath/statcanXtabs
+
+
+#### https://github.com/warint/statcanR
+
+statcanR
+
+Easily connect to Statistics Canada’s Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user’s R environment.
+
+
+
+#### install.packages('canadamaps')
+
+Terrestrial maps with simplified topologies for Census Divisions, Agricultural Regions, Economic Regions, Federal Electoral Divisions and Provinces.
+
+
+
+
+## Packages not on CRAN
+
+#### https://github.com/VLucet/rgovcan 
+rgovcan
+Easy access to the Canadian Open Government Portal
+
+
+#### https://github.com/bcgov/canwqdata
+canwqdata
+An R package to download open water quality data from Environment and Climate Change Canada’s National Long-term Water Quality Monitoring Data.
+
+
+
+## Codes on GitHub
+
+
+### Expenditures and  procurement
+
+#### https://github.com/nmarum/canadadefencespending
+
+Data wrangling and exploratory analysis of publicly available data about National Defence expenditures and defence procurement.
+
+
+### Health and Environment 
+
+
+#### https://github.com/dbuijs/HealthCanadaOpenData
+
+A project for importing open data from Health Canada's website into R.
+
+
+### Elections 
+
+
+#### 2019 Canadian election forecast
+
+
+
+#### https://github.com/thisismactan/Canada-2019
+
+
+This is the repository for the Election StatSheet 2019 Canadian election forecast. 
+
+
+
+#### 2015 Canadian Election Data
+
+https://github.com/lchski/canada-2015-federal-election-data
+
+
+
+
+
+#### https://github.com/lchski/canada-2015-federal-election-data
+2015 Canadian Election Data
+
+
+
+
+#### FPTP Election Strategizer 
+
+"FPTP Election Strategizer: A data-science driven tool to mitigate the political biases of the First Past The Post  electoral system in Canada" -
+Research article, with R code and visualizations in support of [Fair Vote Canada]("https://www.fairvote.ca)
+
+https://github.com/ivi-m/election-strategizer/
+
+<!-- (https://ivi-m.github.io/election-strategizer/) -->
+### Ottawa
+
+#### https://github.com/whipson/Ottawa_Bicycles
+
+Data and cleaning scripts for Ottawa Bicycle Counter shiny app.
+
+#### https://github.com/lchski/ottawa-fire-stations
+
+Mapping Ottawa’s fire stations
+
+
+### Vancouver 
+
+Many  codes, packages, and blogs related to Vancouver and Canada, and other utility functions, are developed by  
+[MountainMath (Jens von Bergman)](https://mountainmath.ca/) - Source: https://github.com/mountainMath
+
+
+
+
+###  Other related packages 
+
+From [jennybc](https://github.com/jennybc)
+
+googlesheets Public
+Google Spreadsheets R API
+
+
+googleComputeEngineR Public
+Forked from cloudyr/googleComputeEngineR

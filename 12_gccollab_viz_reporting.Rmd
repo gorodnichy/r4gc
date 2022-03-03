@@ -1,0 +1,105 @@
+
+
+
+
+<!-- # (PART) Specialized topics {.unnumbered} -->
+
+
+
+<!-- (and other languages/tools) -->
+
+
+
+# ggplot2 and its extensions for data visualization
+
+
+Many come to R (from Python and other languages/ systems) mainly because of the advanced data visualization capabilities it offers. There are many of those, as are the resources. Share your recommendations and examples here.
+
+
+
+## Resources
+
+See: https://github.com/IVI-M/R-Ottawa/blob/master/resources.md
+
+Introduction to ggplot2
+
+How to customize ggplot2
+
+Top 50 ggplot2 visualizations
+
+ggplot2 quick reference sheet
+
+ggplot2 quick reference for colour names
+
+Modifying components of theme() in ggplot2
+
+Colours in ggplot2, including colour-blind friendly palette
+
+Package for colour manipulation, including visualizing the effects of colour-blindness on colour palettes. https://cran.r-project.org/package=prismatic
+
+Dmitry Gorodnichy's avatar
+By Dmitry Gorodnichy 2021-04-08 22:15Edit the discussion reply by Dmitry GorodnichyDelete the discussion reply by Dmitry GorodnichyLike the discussion reply by Dmitry Gorodnichy
+bookdown.org books on advanced visualization with ggplot and its extensions
+
+https://serialmentor.com/dataviz/ - https://github.com/clauswilke/dataviz.
+Fundamentals of Data Visualization. Claus O. Wilke
+https://github.com/jjallaire/dataviz-r
+
+
+OpenSDP Dataviz Tutorial (R)
+
+
+### Plotly + R Shiny
+
+https://socviz.co/ -
+Data Visualization. A practical introduction
+https://r-graphics.org/
+R Graphics Cookbook, 2nd edition. Winston Chang. 2019-12-19
+with Plotly in R
+
+Intro to Animations | R | Plotly - https://plotly.com/r/animations/
+https://plotly-r.com/index.html
+https://plot.ly/r/animations/
+
+
+
+
+# Shiny for Interactive Data Visualization, Analysis and Web App development
+
+
+This discussion thread is dedicated to Shiny package - a  RStudio-curated tool for developing and deploying Interactive Data Visualization and Analysis tools and applications.
+
+## Resources
+
+Kick start to Shiny - https://www.datacamp.com/courses/building-web-applications-in-r-with-shiny
+
+See also:
+
+Shiny - Gallery (rstudio.com) - https://shiny.rstudio.com/gallery/
+https://engineering-shiny.org/
+
+
+
+# Interactive Outputs in R: plotly, Datatable, reactable
+
+This  discussion is dedicated to tools to generate interactive graphs, tables, and other content without Shiny (which, as you know, requires a server to host your Shiny application and which for this reason cannot be easily shared with your clients, e.g. by email)
+
+
+
+Here are the most popular ones:
+
+
+https://rstudio.github.io/DT/  
+https://plotly.com/r/ and   
+https://glin.github.io/reactable  
+
+
+## `reactable`
+<!-- Your clients will love it -  -->
+
+Check what kind of interactive coloured tables you can make with it: 
+<!-- - it's like a coloured table inside your R generated report): -->
+  https://glin.github.io/reactable/articles/womens-world-cup/womens-world-cup.html
+
+
+

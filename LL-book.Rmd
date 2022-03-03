@@ -1,0 +1,299 @@
+---
+knit: "bookdown::render_book" # This lines needs to be FIRST, if you file is not named index.Rmd!
+site: bookdown::bookdown_site
+documentclass: book
+
+title: "The R4GC Book" # "Open R4GC Book"
+# title: "R for Government of Canada"
+# title: "Learn Data Science with R (The R4GC Book)" # Use R in GC
+
+
+subtitle: "Learn Data Science with R: Notes and tutorials from the R4GC Community 'Lunch and Learn' meetups"
+# subtitle: "Notes and tutorials from the R4GC Community meetups"
+
+# author:
+#   - Dmitry Gorodnichy
+#   - Patrick Little
+
+author: |
+  Dmitry Gorodnichy and Patrick Little    
+  [https\://open-canada.github.io/r4gc](https\://open-canada.github.io/r4gc) (License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/))
+  
+description: "Notes and tutorials from 'Lunch and Learn Data Science with R' weekly meetups organized by the R4GC Community"
+
+# date: "22 November 2021"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+# date: "`r format(Sys.time(), '%B %Y')`"
+
+
+github-repo: "open-canada/r4gc"
+url: 'https\://open-canada.github.io/r4gc'
+cover-image: "images/r4gc-banner.png"
+favicon: "images/R4GC.ico"
+
+# https://github.com/rstudio/bookdown/blob/master/inst/templates/bs4_book.html.
+output:
+  # bookdown::bs4_book: default
+  # bookdown::bs4_book:  #  needs this - install.packages("downlit")
+    # includes:
+    #   before_body: assets/header.html
+
+  bookdown::gitbook:
+    # includes:
+    #   before_body: assets/header.html
+    # split_by: section
+    config:
+      edit: https://github.com/open-canada/r4gc/edit/main/%s
+      toc:
+        collapse: section # subsection # none
+        before: |
+          <!-- <li><a href="index.html"> "R4GC workbook"</a> </li> -->
+          <li><a href="index.html"> <img width="100%" src="images/r4gc-banner.png"> </a>      </li>
+        after: |
+          <li><a   href="https://bookdown.org/yihui/bookdown/">
+          Published with bookdown</a>/li>
+      download: [epub,pdf]
+      sharing:
+        facebook: yes
+        linkedin: yes
+        github: yes
+   
+    
+  # bookdown::html_document2:  # I need compile it from here By clicking "knit" NOT from Build menu!
+  #   toc: yes
+  #   toc_depth: 2
+  #   toc_float: yes
+  #   collapsed: yes # no
+  #   number_sections: false
+  # 
+  # bookdown::epub_book: default
+---
+
+```{r -globals, include=F}
+if (T) { # 0. global settings ----
+  # options(scipen=999); #remove scientific notation
+  packages <- c("ggplot2","magrittr", "stringr")
+  sapply(packages, library, character.only = TRUE)
+  library(lubridate,  quietly=T);   options(lubridate.week.start =  1)
+  library(data.table);   options(datatable.print.class=TRUE)
+
+  dateToday <- format(Sys.time(), '%d %B, %Y') %>% dmy; dateToday
+  
+  "%wo%" <- function(x, y) setdiff(x,y) 
+  `%ni%` <-  Negate(`%in%`)
+}
+```
+
+<!-- We can paste many useful intro texts from https://github.com/open-canada/geocompr/blob/main/index.Rmd like this one -->
+
+
+```{r index-1, echo=FALSE}
+is_on_ghactions = identical(Sys.getenv("GITHUB_ACTIONS"), "true")
+is_online = curl::has_internet()
+is_html = knitr::is_html_output()
+is_shiny = shiny::isRunning() 
+```
+
+
+
+
+<!-- https://bookdown.org/yihui/rmarkdown-cookbook/toc-unlisted.html - Note that this feature requires at least Pandoc 2.10. -->
+
+#### Disclaimer:
+The views and opinions expressed in this book are those of the book authors and contributors and do not necessarily reflect the official policy or position of any agency of the Government of Canada. {.unlisted .unnumbered}
+
+<!-- <a href="https://www.bookdown.org" target="blank">bookdown</a> -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T) # Set echo=T to use with "code_folding: hide"
+```
+
+
+
+```{r 00_frontmatter, child = '00_frontmatter.Rmd'}
+```
+
+
+# Français {-}
+
+Pour l'instant, ce livre est développé seulement en anglais. Cependant, plusieurs de commentaires et trucs  qu'on partage dans notre communauté proviens également dans la langue française aussi. 
+
+On espère qu'un moment donné 
+on peut
+d'avoir ce livre dans le deux langues officielles: en anglais et en français.
+<!-- traduire ce livre  -->
+On même peux se servir des outils automatisés  et intelligence artificielle - car nous sommes les scientifiques de données, n'est pas ? - pour automatiser le traduction de contexte de ce livre!
+
+
+Si vous êtes intéressé de contribuer à nos efforts de traduire ce livre dans le langue de votre choix, 
+veuillez contacter [modérateur de groupe](index.html#contacts).
+
+
+```{r 00_2_preface, child = '00_2_preface.Rmd'}
+```
+
+
+# (PART) General discussions {.unnumbered}
+
+
+```{r 11_r_general, child = '11_r_general.Rmd'}
+```
+
+
+```{r 11_Great_bookdown_books.Rmd, child = '11_Great_bookdown_books.Rmd'}
+```
+
+
+```{r 11_r_forums.Rmd, child = '11_r_forums.Rmd'}
+```
+
+
+```{r 11_gc_policies.Rmd, child = '11_gc_policies.Rmd'}
+```
+
+
+
+
+
+<!-- # (PART) Efficient R coding {-} -->
+
+# (PART) Art of R programming {-}
+
+```{r 14_gccollab_efficient.Rmd, child = '14_gccollab_efficient.Rmd'}
+```
+
+
+
+# (PART) Visualization and Reporting {-}
+
+
+```{r 12_rmarkdown.Rmd, child = '12_rmarkdown.Rmd'}
+```
+
+
+```{r 12_gccollab_viz_reporting.Rmd, child = '12_gccollab_viz_reporting.Rmd'}
+```
+
+
+```{r 12_geo.Rmd, child = '12_geo.Rmd'}
+```
+
+
+# (PART) Machine Learning and AI {-}
+
+
+```{r 13_1_linking, child = '13_1_linking.Rmd'}
+```
+
+
+
+```{r 13_text_analysis, child = '13_text_analysis.Rmd'}
+```
+
+
+```{r 13_gccollab_ML, child = '13_gccollab_ML.Rmd'}
+```
+
+
+
+
+# (PART) Community Tutorials {-}
+
+R4GC community "Lunch and Learn Data Science with R" weekly meetups : (NB: you need to join the "Lunch and Learn Data Science with R" meetups group to access recordings of these sessions)
+
+```{r 01_gccode101.Rmd, child = '01_gccode101.Rmd'}
+```
+
+
+```{r 02_packages101.Rmd, child = '02_packages101.Rmd'}
+```
+
+
+# R101: Building COVID-19  Tracker App from scratch 
+
+A nine-session R101 tutorial for beginners was run in 2020. 
+The following page provides codes and video-recording for this tutorial: https://ivi-m.github.io/R-Ottawa/101.html
+
+<!-- One day they will be moved here (maybe) -->
+
+
+<!-- https://open-canada.github.io/UseR/learn2020.html -->
+
+Season 1 (Summer 2020)   
+Topic: “Building COVID Web App from scratch”    
+Sub-topic: “Doing Data Science with R: Computer Science way”   
+Dates: April - June 2020
+
+Summary:
+
+In this first Season of R101 training, we showed how to build from scratch AI and Data Science tools using R in RStudio. You can see the final result  from this tutorial here: https://itrack.shinyapps.io/covid/us.Rmd
+
+
+
+
+
+
+
+
+# (PART) Community Databases {-}
+
+```{r 21_gc_datasets, child = '21_gc_datasets.Rmd'}
+```
+
+<!-- # (PART) Community Codes {-} -->
+
+<!-- ```{r 20_gc_apps, child = '20_gc_apps.Rmd'} -->
+<!-- ``` -->
+
+
+
+
+
+
+<!-- # (PART) Community Development {-} -->
+# (PART) Community Codes {-}
+
+
+```{r 30_gc_LL, child = '30_gc_LL.Rmd'}
+```
+
+
+
+<!-- ```{r 20_gc_apps, child = '20_gc_apps.Rmd'} -->
+<!-- ``` -->
+
+
+
+```{r 40_ca_packages, child = '40_ca_packages.Rmd'}
+```
+
+
+<!-- # (APPENDIX) Appendices {-} -->
+
+
+
+<!-- # Technical information -->
+
+<!-- This book is written in R Markdown and R, with the use of 'bookdown' package, and compiled in R Studio. -->
+
+<!-- ## Colophone -->
+
+<!-- When archiving an article that was generated from R code, it's a good practice to include the information about the system where the code was run, the way it is done here: -->
+<!-- ```{r} -->
+<!-- sessionInfo() -->
+<!-- ``` -->
+
+
+<!-- ```{r 00-releaseNotes.Rmd, child = '00-releaseNotes.Rmd'} -->
+<!-- ``` -->
+
+
+
+```{r include=FALSE}
+knitr::knit_exit()
+```
+
+
+
+<!--chapter:end:index.Rmd-->
+
