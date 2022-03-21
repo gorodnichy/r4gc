@@ -159,6 +159,11 @@ veuillez contacter [modérateur de groupe](index.html#contacts).
 
 # (PART) Art of R programming {-}
 
+
+```{r 14_1_reading_data.Rmd, child = '14_1_reading_data.Rmd'}
+```
+
+
 ```{r 14_gccollab_efficient.Rmd, child = '14_gccollab_efficient.Rmd'}
 ```
 

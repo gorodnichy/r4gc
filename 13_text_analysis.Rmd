@@ -172,7 +172,7 @@ if (F) {
 
 https://stackoverflow.com/questions/55244680/extract-words-in-between-two-commas-in-r
     
-```
+```{r}
 
 word <- 'Fu Tien Mansion, Taikoo Shing, Hong Kong'
 # and I want to extract the word in between the two commas and concatenate it with the first word, what regex to use?
@@ -194,6 +194,22 @@ paste(
         ), 
     trimws(sapply(strsplit(word,","), `[`, 1))
     )
+```
+
+### Extracting numbers from string in R using a template
+
+
+```{r}
+
+#  https://stackoverflow.com/questions/71358881/extracting-numbers-from-string-in-r-using-a-template
+
+x <- '16,296 (12.4%)'
+gsub("[(),%]", "", x) %>% strsplit(" ") %>% unlist() %>% as.numeric()
+
+getNfromS <- function (x) {
+  d <- gsub("[(),%]", "", x) %>% strsplit(" ") %>% unlist() %>% as.numeric()
+}
+
 ```
 
 ### Automatically finding / removing common parts in strings 

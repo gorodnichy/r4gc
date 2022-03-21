@@ -1,0 +1,275 @@
+
+
+# Reading various kinds of data in R
+
+
+There are many kinds of data you want to read - and you want to them efficiently (i.e. , automatically and fast):
+
+
+- badly formatted data, 
+- sparse data,
+
+- distributed  "big" data
+
+- just very large and very very large
+
+-  MS excel, MS Words
+
+- from clouds: AWS, MS Azure etc
+
+-  pdf, html
+
+-  zip files
+
+-  google docs, google sheets
+
+-  GCdocs and from other GC platforms (that was one of the questions at our Friday's R meetup), and,
+
+- from web pre-formated
+
+- other IoT and web-crawling
+
+
+#### fread
+
+Our  favourite methods for reading / writing "regular" .csv files has been 'data.table::fread() and fwrite()' - the fastest and automated in many ways. 
+
+#### vroom
+
+ 
+
+Now there's another one - with package 'vroom' - https://cran.r-project.org/web/packages/vroom/vignettes/benchmarks.html
+
+###  rio
+
+```
+library(rio)
+install_formats()
+```
+
+See:  https://www.computerworld.com/article/2497164/business-intelligence-beginner-s-guide-to-r-get-your-data-into-r.html
+
+## readxl and xlsx
+
+For reading Excel files, you can use readxl. 
+You would like  to be able to import a set of columns formed by non-contiguous columns of a sheet (something possible to select in the newer versions of Excel using data queries). 
+
+For writing Excel files, you can use xlsx, espcially, if you need to be able to write multiple sheets in a file.
+
+
+## Discussion
+
+
+The analyst should, actually, never stick to one solution but rather adapt to the needs of the project. For every format that is good and efficient with big data, you gain either 1) get manipulation overhead that does not make sense when manipulating small datasets, and they can end up slower than even dataframes in that case on small data but hundreds of times faster in big data (e.g. feather), or 2) need to wait forever and lose storage space for nothing (parquet) if the data is not big enough. Yet, if you found the right solution for every size and need, it will make a world of difference.
+
+...
+
+The example below does a comparison of some popular formats when used with Pandas (Python). You will get similar results in R
+
+https://towardsdatascience.com/the-best-format-to-save-pandas-data-414dca023e0d
+
+ 
+
+...
+
+One of the options,  if your are only playing locally and not in the cloud, is using the 'feather' format with 'sql.'
+
+ 
+
+If you need to extract data from a database and do more advanced data engineering without loading data in your RAM, you need SQL to prepare the extraction and do basic to advanced manipulation (SQL is Turing-complete, eh).
+
+For more advanced and permanent transformations to the data, you need stored procedures (SQL again).
+
+
+
+And if you play in the cloud, this is even more essential. For example, in AWS, you can create user-defined functions in Redshift using Python and Postgres SQL, but not R. All manipulation needs to be done in SQL, and Python can be used for other purposes such as calculations and fuzzy matching.
+
+
+
+You can still use R in the rebranded Jupyter notebooks (Sagemaker in AWS, Azure Notebooks in Azure), but R is not as widely compatible in other cloud applications as SQL and Python. - [ PD: But you can absolutely use R in AWS for ETL. In fact you could even set up API endpoints via plumbr, there's a whole AWS tutorial that deals with this issue]
+
+ 
+
+References:
+ 
+
+https://github.com/pingles/redshift-r/
+Provides a few functions to make it easier to access Amazon's Redshift service from R.
+
+http://www.rforge.net/RJDBC/index.html
+install.packages("RJDBC",dep=TRUE) 
+RJDBC is a package implementing DBI in R on the basis of JDBC. This allows the use of any DBMS in R through the JDBC interface. The only requirement is working Java and a JDBC driver for the database engine to be accessed. 
+feather  (for larger than gigb):
+https://blog.rstudio.com/2016/03/29/feather/
+
+parquet ( for verrrrry large files)
+https://campus.datacamp.com/courses/introduction-to-spark-with-sparklyr-in-r/case-study-learning-to-be-a-machine-running-machine-learning-models-on-spark?ex=4
+
+
+Conclusions: As a side note on size, speed, and performance : it all depends on what you do, the delays, and the cost.
+
+ 
+
+For example, if you use the cloud:
+
+-        If your data is going to be queried very often, so you have large volumes of data that would be scanned, move your processing to a runtime-billed tool (e.g. Redshift in AWS) rather than a data-billed tool (e.g. Athena in AWS). Otherwise, your cost may increase exponentially if users can survey data freely from, say, Tableau dashboards without caring for the actual amount of data that is queried. So if the data is queried 24/24h, your cost is stable and won’t increase with volume.
+
+-        If you may scan large volumes once or twice a day, then you would have to compare the costing options.
+
+-        If the costing model is incremental by runtime and you have very large amounts of data that you need to query quickly, then it would be best to use columnar formatted tables such as parquet. There is a cost and delay involved for the conversion, and you need much more storage because of the flattened structure, so storage will be more expensive (especially considering that you clone your original data and use at least twice the space then). However, queries will fly, and the cost of computation will be much smaller thereafter.
+
+-        For occasional queries, a data-billed tool would likely be the best option.
+
+ 
+
+If you want to prototype with small datasets, do not lose time with parquet… CSV is the worst format after Excel files (which need to be unpacked and repacked), in any scenario, but the time investment in time to convert data is not worth it at all. Data.table and DT will be your best friends in R.
+
+ 
+
+As for using SQL vs packages such as DPLYR, I mentioned a gain in performance, but be careful. If you use raw SQL, then you will see a big gain in performance. However, there are packages out there that translate SQL to R or Python interpretable code, and those will possibly be slower due to the interpretation layer. DPLYR, on the other hand, is quite efficient and well optimized. As usual, it depends on the packages. In R, the sqldf package should be good, if you want to try it out.
+
+
+## Reading Google sheets
+
+googlesheets4 will, by default, help you interact with Sheets as an authenticated Google user. 
+[14.1]
+
+[14.1]: https://googlesheets4.tidyverse.org/
+
+
+
+If you don’t plan to write Sheets or to read private Sheets, use gs4_deauth() to indicate there is no need for a token. 
+
+To be able to write into Sheet, you'll need first to create Developer account at 
+https://developers.google.com/sheets/api/
+
+Lets open 'Cases following vaccination (Source: [PHAC-1], Table 2 )'
+
+### Reading https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html#a9 (Table 2)
+
+```{r}
+
+source("00_common.R")
+library(googlesheets4)
+gs4_deauth()
+
+# gs4_auth()
+
+
+# 'Cases following vaccination (Source: [PHAC-1], Table 2 _ - sorted Z-A
+# strSheet <- "https://docs.google.com/spreadsheets/d/1p27Qsk-O-vzr6aGqyAVUODyRL97wh9PIxMchpJSWFn0/edit?usp=sharing"
+
+# Cases following vaccination (Source: PHAC) - Posted, Unsorted
+strSheet <- "https://docs.google.com/spreadsheets/d/1lSO5jJwTkMNGl9kk6Y5jeGORGS11KzEE5yTxBGrGYKw/edit?usp=sharing"
+
+col_type  = paste0("DD", paste0 (rep("d", which(letters == "x") - 2),collapse = ""))
+
+dtRaw <- read_sheet(strSheet, 
+                 sheet=2,  range="A:X",  
+                 col_types = col_type,
+                 col_names=F
+                 ) %>% setDT
+dtWeekly <- read_sheet(strSheet, 
+                 sheet=3,  range="A:X",  
+                 col_types = col_type,
+                 col_names=F
+                 ) %>% setDT
+
+
+#  https://stackoverflow.com/questions/71358881/extracting-numbers-from-string-in-r-using-a-template
+
+x <- '16,296 (12.4%)'
+gsub("[(),%]", "", x) %>% strsplit(" ") %>% unlist() %>% as.numeric()
+
+
+# Severe C-19 outcomes by age (Source: PHAC-1)
+
+strSheet <- "https://docs.google.com/spreadsheets/d/1UiIgWgnvkoPLIaxdBcz3XSPTymOVDKUp-pH7pv-HyhY"
+
+getNfromS <- function (x) {
+  d <- gsub("[(),%]", "", x) %>% strsplit(" ") %>% unlist() %>% as.numeric()
+}
+dtCasesByAge0 <- read_sheet(
+  strSheet, col_types="c", col_names=T, sheet=2, range="A2:D11"  ) %>% setDT
+dtCasesByAge0
+
+dtCasesByAge <- dtCasesByAge %>% melt (id=1)
+
+dtCasesByAge[ , d:= lapply(value, getNfromS)][,':=' (N=d[1], p=d[2])]
+
+dtCasesByAge %>% ggplot() +
+
+
+
+dtCasesByAgeN <- 1
+
+cols <- dtCasesByAge %>% names
+
+dtCasesByAge
+  dtCasesByAge[, getNfromS(.SD) ]
+
+
+
+# Side-effects following vaccination by age (Source: PHAC-2)
+###  https://health-infobase.canada.ca/covid-19/vaccine-safety/
+
+strSheetPHAC2 <- "https://docs.google.com/spreadsheets/d/1BIoCKiIBY5UJ0_4Q6eiz_51TSn_NImkSrJeoIzNm5pY/edit?usp=sharing"
+
+dtEvents<- read_sheet(strSheetPHAC2, 
+                 # col_types = col_type,
+                 # col_names=F,
+                 sheet=2  ) %>% setDT
+
+ncol <- dtEvents %>% ncol
+col_type  = paste0("D", paste0 (rep("d", ncol-1), collapse = ""))
+
+dtEvents<- read_sheet(strSheetPHAC2, 
+                 col_types = col_type,
+                 # col_names=F,
+                 sheet=2  ) %>% setDT
+
+```
+
+
+## Reading Tables from HTML
+
+```{r}
+# https://www.r-bloggers.com/2020/04/scrape-html-table-using-rvest/
+library(xml2)
+library(rvest)
+library(tidyverse)
+
+content <- read_html("https://en.wikipedia.org/wiki/List_of_highest-grossing_films_in_the_United_States_and_Canada")
+
+strPHAC1 <- "https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html"
+
+strPHAC2 <- "https://health-infobase.canada.ca/covid-19/vaccine-safety/"
+
+content <- read_html(strPHAC1)
+
+tables <- content %>% html_table(fill = TRUE)
+
+
+# https://gist.github.com/johnjosephhorton/672733
+
+# library(XML)
+# html <- htmlParse(strPHAC1)
+
+
+
+# https://stackoverflow.com/questions/1395528/scraping-html-tables-into-r-data-frames-using-the-xml-package
+library(XML)
+library(RCurl)
+library(rlist)
+
+
+theurl <- getURL(strPHAC1,.opts = list(ssl.verifypeer = FALSE) )
+tables <- readHTMLTable(theurl)
+tables <- list.clean(tables, fun = is.null, recursive = FALSE)
+n.rows <- unlist(lapply(tables, function(t) dim(t)[1]))
+
+```
+
+
+
+
