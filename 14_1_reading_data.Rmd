@@ -51,11 +51,52 @@ See:  https://www.computerworld.com/article/2497164/business-intelligence-beginn
 
 ## readxl and xlsx
 
+
+
 For reading Excel files, you can use readxl. 
 You would like  to be able to import a set of columns formed by non-contiguous columns of a sheet (something possible to select in the newer versions of Excel using data queries). 
 
-For writing Excel files, you can use xlsx, espcially, if you need to be able to write multiple sheets in a file.
+For writing Excel files, you can use xlsx, especially, if you need to be able to write multiple sheets in a file.
 
+```
+dt1<- readxl::read_excel(url, sheet = 2) # Local file only
+```
+
+```{r}
+
+library(readxl)
+source("00_common.R")
+
+
+
+
+
+require(RCurl)
+require(gdata)
+
+url <- "http://github.com/IVI-M/std-data/raw/main/uk/ONS_EW_2010_2021_AGE_MORTALITY.xlsx" # NB: use http INSTEAD OF https
+
+# dt11 = read.xls(url, 1) # failed
+dt12=read.xls(url, 2); 
+
+# dt13 = read.xls(url, 3) # failed
+# dt14 = read.xls(url, 4) # failed
+
+
+
+url2 <- "http://github.com/IVI-M/std-data/raw/main/uk/ONS_EW_2020_2021_AGE_MORTALITY.xlsx" # NB: use http INSTEAD OF https
+
+
+dt22=read.xls(url2, 2); names(dt22)
+dt23=read.xls(url2, 3) 
+dt24=read.xls(url2, 4) 
+dt25=read.xls(url2, 5)
+# dt=read.xls(url2, 6) # failed
+# dt=read.xls(url2, 7)
+# dt=read.xls(url2, 8)
+
+
+```
 
 ## Discussion
 
@@ -147,7 +188,9 @@ Lets open 'Cases following vaccination (Source: [PHAC-1], Table 2 )'
 
 ### Reading https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html#a9 (Table 2)
 
-```{r}
+<!-- 
+
+```
 
 source("00_common.R")
 library(googlesheets4)
@@ -197,7 +240,7 @@ dtCasesByAge <- dtCasesByAge %>% melt (id=1)
 
 dtCasesByAge[ , d:= lapply(value, getNfromS)][,':=' (N=d[1], p=d[2])]
 
-dtCasesByAge %>% ggplot() +
+# dtCasesByAge %>% ggplot()
 
 
 
@@ -273,3 +316,105 @@ n.rows <- unlist(lapply(tables, function(t) dim(t)[1]))
 
 
 
+
+## Writing data from shiny
+
+https://shiny.rstudio.com/articles/persistent-data-storage.html
+used in Abstractor
+
+
+
+## Reading  from PDF
+
+
+```{r}
+
+
+
+```
+
+
+---
+title: "PDF Searching Keywords and Extracting Tables (R and Python)"
+author: "Oliver"
+date: "28 3 2022"
+output: html_document
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(pdftools)
+library(pdfsearch)
+library(tidyverse)
+library(reticulate)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Path
+directory <- 'C:\\Users\\Oliver\\Documents\\myrepo\\pd-production-030122'
+
+result <- 
+    keyword_directory(directory
+                      ,keyword = c('HIV')
+                      ,surround_lines = 1
+                      ,full_names = TRUE)
+
+pdf_grouped <- result %>% 
+    select(pdf_name, keyword) %>% 
+    group_by(pdf_name, keyword) %>% 
+    summarise(Count = n()) %>% 
+    arrange(desc(Count))
+
+searchPDF <- pdf_grouped %>%
+   filter(pdf_name == "125742_S1_M5_c4591001-T-S-final-reacto-tables-track.pdf") %>% #hardcoded pdf
+    pull(pdf_name)
+
+pdf_grouped
+```
+
+```{python include=FALSE}
+# deployment server needs python
+# installing tabula-py (Anaconda)
+# using virutal-env from Anaconda in R Studio Global Options
+import tabula
+import os
+
+#reticulate can pass variables between R and Python
+path = r.directory
+
+pdf = r.searchPDF
+
+searchstring = path + "\\" + pdf
+
+# read PDF file and extract tables
+tables = tabula.read_pdf(searchstring, pages = "all")
+
+# save tables in a folder - each tables get his own sheet
+folder_name = pdf + "-tables"
+if not os.path.isdir(folder_name):
+    os.mkdir(folder_name)
+# iterate over extracted tables and export as excel individually
+for i, table in enumerate(tables, start=1):
+    table.to_excel(os.path.join(folder_name, f"table_{i}.xlsx"), index=False)
+
+```
+
+
+
+```{r}
+library(pdftools)
+library(pdfsearch)
+
+directory <- 'C:\\pdfDirectory'
+
+result <- 
+  keyword_directory(directory
+                    ,keyword = c('cardio','lung')
+                    ,surround_lines = 1
+                    ,full_names = TRUE)
+head(result)
+```
+
+
+-->
+
+### Reading Tables from PDF

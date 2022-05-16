@@ -103,3 +103,9 @@ Check what kind of interactive coloured tables you can make with it:
 
 
 
+## Prebuild viz tools
+
+https://github.com/vnijs/radiant
+
+
+https://radiant-rstats.github.io/docs/install.html

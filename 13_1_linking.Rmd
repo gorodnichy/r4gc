@@ -95,12 +95,12 @@ useBytes = FALSE)
 
 ```{r}
 ## Cf. the examples for agrep:
-adist("lasy", "1 lazy 2")
+adist("lasy", "1 lazy 2") %>% unlist
 ## For a "partial approximate match" (as used for agrep):
 adist("lasy", "1 lazy 2", partial = TRUE)
 
 x <- c("1 lazy", "1", "1 LAZY")
-aregexec("laysy", x, max.distance = 2)
+aregexec("laysy", x, max.distance = 2) %>% unlist
 aregexec("(lay)(sy)", x, max.distance = 2)
 
 ```
@@ -116,7 +116,7 @@ aregexec("(lay)(sy)", x, max.distance = 2)
   summary(dtStatcan)
 
 
-  dtStatcan[str_detect(GEO_CODE, "(?i)^3506008")]
+  dtStatcan[str_detect(GEO_CODE, "(?i)^3506008") ]# case-insensitive
   dtStatcan[GEO_CODE %ilike% "^3506008"]
   dtStatcan[GEO_CODE %ilike% "(?i)^350600"]
   dtStatcan[GEO_CODE %ilike% "(?i)^3506" & GEO_LEVEL<4][order(GEO_LEVEL)]
@@ -235,9 +235,10 @@ Implements an approximate string matching version of R's native 'match' function
 
 ```{r eval=FALSE, include=FALSE}
 
+library(stringdist)
 
-
-texts = c("When I grow up, I want to be" , "one of the harvesters of the sea" , "I think before my days are gone" , "I want to be a fisherman"); patterns = c("fish", "gone","to be")
+texts = c("When I grow up, I want to be" , "one of the harvesters of the sea" , "I think before my days are gone" , "I want to be a fisherman"); 
+patterns = c("fish", "gone","to be")
 
 afind(texts, patterns, method="running_cosine", q=3)
 grabl(texts,"grew", maxDist=1) 
@@ -245,6 +246,7 @@ extract(texts, "harvested", maxDist=3)
 
 
 amatch(c("hello","g'day"),c("hi","hallo","ola"),maxDist=2)
+amatch(c("hi","hallo","ola"),c("hello","g'day"), maxDist=2)
 
 stringdist(c("g'day"),c("hi","hallo","ola"))
 

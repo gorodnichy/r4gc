@@ -108,7 +108,7 @@ The views and opinions expressed in this book are those of the book authors and 
 knitr::opts_chunk$set(echo=T) # Set echo=T to use with "code_folding: hide"
 ```
 
-
+<!-- 
 
 ```{r 00_frontmatter, child = '00_frontmatter.Rmd'}
 ```
@@ -121,7 +121,7 @@ Pour l'instant, ce livre est développé seulement en anglais. Cependant, plusie
 On espère qu'un moment donné 
 on peut
 d'avoir ce livre dans le deux langues officielles: en anglais et en français.
-<!-- traduire ce livre  -->
+
 On même peux se servir des outils automatisés  et intelligence artificielle - car nous sommes les scientifiques de données, n'est pas ? - pour automatiser le traduction de contexte de ce livre!
 
 
@@ -132,6 +132,7 @@ veuillez contacter [modérateur de groupe](index.html#contacts).
 ```{r 00_2_preface, child = '00_2_preface.Rmd'}
 ```
 
+-->
 
 # (PART) General discussions {.unnumbered}
 
@@ -158,6 +159,11 @@ veuillez contacter [modérateur de groupe](index.html#contacts).
 <!-- # (PART) Efficient R coding {-} -->
 
 # (PART) Art of R programming {-}
+
+
+```{r 14_1_reading_data.Rmd, child = '14_1_reading_data.Rmd'}
+```
+
 
 ```{r 14_gccollab_efficient.Rmd, child = '14_gccollab_efficient.Rmd'}
 ```
